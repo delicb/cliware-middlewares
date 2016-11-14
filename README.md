@@ -2,6 +2,11 @@
 This repository contains some useful middlewares for [Cliware](https://github.com/delicb/cliware)
 library.
 
+# Install
+# Install
+Run `go get go.delic.rs/cliware-middlewares` in terminal.
+
+
 # Content
 Middlewares are separated per packages that can be useful on their own. This is done
 because not everybody needs all middlewares. Currently following packages exist:
