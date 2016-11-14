@@ -13,7 +13,7 @@ import (
 type HTTPError struct {
 	Name       string
 	StatusCode int
-	Body       string
+	Body       []byte
 }
 
 func (e *HTTPError) Error() string {
@@ -29,7 +29,7 @@ func createError(resp *http.Response) error {
 	return &HTTPError{
 		Name:       resp.Status,
 		StatusCode: resp.StatusCode,
-		Body:       string(rawData),
+		Body:       rawData,
 	}
 }
 
