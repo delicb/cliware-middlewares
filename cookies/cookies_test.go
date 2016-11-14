@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/delicb/cliware"
-	"github.com/delicb/cliware-middlewares/cookies"
+	"go.delic.rs/cliware"
+	"go.delic.rs/cliware-middlewares/cookies"
 )
 
 func TestAdd(t *testing.T) {

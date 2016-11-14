@@ -1,5 +1,5 @@
 // Package url contains middlewares for manipulating request endpoint.
-package url
+package url // import "go.delic.rs/cliware-middlewares/url"
 
 import (
 	"net/http"
@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	c "github.com/delicb/cliware"
+	c "go.delic.rs/cliware"
 )
 
 // URL parses and sets entire URL to the request.

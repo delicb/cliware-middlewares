@@ -9,8 +9,8 @@ import (
 	"encoding/json"
 	"reflect"
 
-	"github.com/delicb/cliware"
-	"github.com/delicb/gwc2/middlewares/body"
+	"go.delic.rs/cliware"
+	"go.delic.rs/cliware-middlewares/body"
 )
 
 func TestString(t *testing.T) {

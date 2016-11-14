@@ -1,10 +1,13 @@
 // Package headers contains middlewares for manipulating headers on request.
-package headers
+package headers // import "go.delic.rs/cliware-middlewares/headers"
 
 import (
+	"context"
 	"net/http"
 
-	c "github.com/delicb/cliware"
+	"errors"
+
+	c "go.delic.rs/cliware"
 )
 
 // Method sets request method to ongoing request.
@@ -46,5 +49,34 @@ func SetMap(headers map[string]string) c.Middleware {
 			req.Header.Set(k, v)
 		}
 		return nil
+	})
+}
+
+type Header struct {
+	Key   string
+	Value []string
+}
+
+// FromContext adds header to request that is defined in context with provided key.
+func FromContext(key interface{}) c.Middleware {
+	return c.MiddlewareFunc(func(next c.Handler) c.Handler {
+		return c.HandlerFunc(func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
+			value := ctx.Value(key)
+			switch header := value.(type) {
+			case Header:
+				for _, v := range header.Value {
+					req.Header.Set(header.Key, v)
+				}
+			case []Header:
+				for _, hh := range header {
+					for _, v := range hh.Value {
+						req.Header.Set(hh.Key, v)
+					}
+				}
+			default:
+				return nil, errors.New("Context value in unsupported format.")
+			}
+			return next.Handle(ctx, req)
+		})
 	})
 }

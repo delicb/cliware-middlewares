@@ -9,8 +9,8 @@ import (
 
 	"reflect"
 
-	"github.com/delicb/cliware"
-	"github.com/delicb/cliware-middlewares/query"
+	"go.delic.rs/cliware"
+	"go.delic.rs/cliware-middlewares/query"
 )
 
 func TestSet(t *testing.T) {
