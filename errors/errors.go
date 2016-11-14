@@ -10,14 +10,19 @@ import (
 	c "go.delic.rs/cliware"
 )
 
+// HTTPError holds information about failed HTTP request.
 type HTTPError struct {
 	Name       string
 	StatusCode int
+	RequestURL string
+	Method     string
 	Body       []byte
 }
 
+// Error is implementation of error interface for HTTPError. It returns basic
+// information about error that occurred (status code, requested URL)
 func (e *HTTPError) Error() string {
-	return fmt.Sprintf("HTTP error: %s (%d)", e.Name, e.StatusCode)
+	return fmt.Sprintf("HTTPError: %s - %s (%s)", e.Method, e.RequestURL, e.Name)
 }
 
 func createError(resp *http.Response) error {
@@ -29,6 +34,8 @@ func createError(resp *http.Response) error {
 	return &HTTPError{
 		Name:       resp.Status,
 		StatusCode: resp.StatusCode,
+		RequestURL: resp.Request.URL.String(),
+		Method:     resp.Request.Method,
 		Body:       rawData,
 	}
 }

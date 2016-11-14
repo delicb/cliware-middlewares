@@ -52,6 +52,7 @@ func SetMap(headers map[string]string) c.Middleware {
 	})
 }
 
+// Header holds information about what headers to add from context for FromContext middleware.
 type Header struct {
 	Key   string
 	Value []string
