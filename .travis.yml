@@ -6,15 +6,15 @@ go:
 go_import_path: go.delic.rs/cliware-middlewares
 
 script:
-  - go test -race -coverprofile=coverage.txt -covermode=atomic
-  - go test -race -coverprofile=coverage.txt -covermode=atomic ./auth
-  - go test -race -coverprofile=coverage.txt -covermode=atomic ./body
-  - go test -race -coverprofile=coverage.txt -covermode=atomic ./cookies
-  - go test -race -coverprofile=coverage.txt -covermode=atomic ./errors
-  - go test -race -coverprofile=coverage.txt -covermode=atomic ./headers
-  - go test -race -coverprofile=coverage.txt -covermode=atomic ./query
-  - go test -race -coverprofile=coverage.txt -covermode=atomic ./responsebody
-  - go test -race -coverprofile=coverage.txt -covermode=atomic ./url
+  - go test -race -coverprofile=coverage-root.txt -covermode=atomic
+  - go test -race -coverprofile=coverage-auth.txt -covermode=atomic ./auth
+  - go test -race -coverprofile=coverage-body.txt -covermode=atomic ./body
+  - go test -race -coverprofile=coverage-cookies.txt -covermode=atomic ./cookies
+  - go test -race -coverprofile=coverage-errors.txt -covermode=atomic ./errors
+  - go test -race -coverprofile=coverage-headers.txt -covermode=atomic ./headers
+  - go test -race -coverprofile=coverage-query.txt -covermode=atomic ./query
+  - go test -race -coverprofile=coverage-responsebody.txt -covermode=atomic ./responsebody
+  - go test -race -coverprofile=coverage-url.txt -covermode=atomic ./url
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
