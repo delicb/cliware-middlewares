@@ -1,4 +1,8 @@
 # Cliware middlewares
+[![GoDoc](http://godoc.org/github.com/delicb/cliware-middlewares?status.png)](http://godoc.org/github.com/delicb/cliware-middlewares)
+[![Build Status](https://travis-ci.org/delicb/cliware-middlewares.svg?branch=master)](https://travis-ci.org/delicb/cliware-middlewares)
+[![codecov](https://codecov.io/gh/delicb/cliware-middlewares/branch/master/graph/badge.svg)](https://codecov.io/gh/delicb/cliware-middlewares)
+
 This repository contains some useful middlewares for [Cliware](https://github.com/delicb/cliware)
 library.
 
