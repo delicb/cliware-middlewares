@@ -81,3 +81,19 @@ func FromContext(key interface{}) c.Middleware {
 		})
 	})
 }
+
+// ToContext adds headers to context that can be used with FromContext middleware.
+// This is intended to be used for single header (but possibly multiple values).
+// If you need to set multiple headers, use ToContextList.
+func ToContext(ctx context.Context, key interface{}, header string, values ...string) context.Context {
+	return context.WithValue(ctx, key, Header{
+		Key:   header,
+		Value: values,
+	})
+}
+
+// ToContextList adds list of headers to context that can be used with FromContext
+// middleware.
+func ToContextList(ctx context.Context, key interface{}, h []Header) context.Context {
+	return context.WithValue(ctx, key, h)
+}
