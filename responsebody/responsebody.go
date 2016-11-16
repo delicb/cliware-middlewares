@@ -23,3 +23,20 @@ func JSON(data interface{}) c.Middleware {
 		return json.Unmarshal(rawData, data)
 	})
 }
+
+// String reads response body, converts it to string and writes it to provided
+// string pointer.
+func String(data *string) c.Middleware {
+	return c.ResponseProcessor(func(resp *http.Response, err error) error {
+		if err != nil {
+			return err
+		}
+		defer resp.Body.Close()
+		rawData, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return err
+		}
+		*data = string(rawData)
+		return nil
+	})
+}

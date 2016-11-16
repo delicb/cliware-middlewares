@@ -9,6 +9,8 @@ import (
 
 	"fmt"
 
+	"time"
+
 	"go.delic.rs/cliware"
 	"go.delic.rs/cliware-middlewares/headers"
 )
@@ -258,6 +260,128 @@ func TestSetMap(t *testing.T) {
 
 		if !reflect.DeepEqual(data.Expected, req.Header) {
 			t.Errorf("Wrong headers. Got: %s, expected: %s.", req.Header, data.Expected)
+		}
+	}
+}
+
+func TestFromContext(t *testing.T) {
+	for _, data := range []struct {
+		Key    string
+		Header string
+		Value  []string
+		Expect bool
+	}{
+		{
+			Key:    "some-id",
+			Header: "My-Header",
+			Value:  []string{"my-value"},
+			Expect: true,
+		},
+		{
+			Key:    "",
+			Header: "Some header",
+			Value:  []string{},
+			Expect: false,
+		},
+	} {
+		m := headers.FromContext(data.Key)
+		req := cliware.EmptyRequest()
+		ctx := context.Background()
+		ctx = context.WithValue(ctx, data.Key, headers.Header{
+			Key:   data.Header,
+			Value: data.Value,
+		})
+		_, err := m.Exec(createHandler()).Handle(ctx, req)
+		if err != nil {
+			t.Error(err)
+		}
+		rawHeader, ok := req.Header[data.Header]
+		if !ok && data.Expect {
+			t.Fatalf("Header %s not found in request.", data.Header)
+		}
+		if data.Expect {
+			if !reflect.DeepEqual(rawHeader, data.Value) {
+				t.Errorf("Wrong header value set. Got: %v, expected: %v.", req.Header.Get(data.Header), data.Value)
+			}
+		}
+	}
+}
+
+func TestToContext(t *testing.T) {
+	for _, data := range []struct {
+		Key    interface{}
+		Header string
+		Value  []string
+	}{
+		{
+			Key:    "some-id",
+			Header: "Header",
+			Value:  []string{"value"},
+		},
+		{
+			Key:    1,
+			Header: "",
+			Value:  []string{},
+		},
+		{
+			Key:    time.Now(),
+			Header: "My-Header",
+			Value:  []string{"val1", "val2"},
+		},
+	} {
+		ctx := headers.ToContext(context.Background(), data.Key, data.Header, data.Value...)
+		val := ctx.Value(data.Key)
+		if header, ok := val.(headers.Header); ok {
+			if !reflect.DeepEqual(header.Value, data.Value) {
+				t.Errorf("Got wrong value for header. Got: %v, expected: %v.", header.Value, data.Value)
+			}
+		} else {
+			t.Errorf("Got wrong type from context for key. Got: %T, expected %T", val, headers.Header{})
+		}
+	}
+}
+
+func TestToContextList(t *testing.T) {
+	for _, data := range []struct {
+		Key     interface{}
+		Headers []headers.Header
+	}{
+		{
+			Key: "some-id",
+			Headers: []headers.Header{
+				{
+					Key:   "myheader",
+					Value: []string{"value"},
+				},
+			},
+		},
+		{
+			Key: "",
+			Headers: []headers.Header{
+				{
+					Key:   "",
+					Value: []string{},
+				},
+			},
+		},
+		{
+			Key: 1,
+			Headers: []headers.Header{
+				{
+					Key:   "My-Header",
+					Value: []string{"val1", "val2", "val3"},
+				},
+			},
+		},
+	} {
+		ctx := headers.ToContextList(context.Background(), data.Key, data.Headers)
+		val := ctx.Value(data.Key)
+		if header, ok := val.([]headers.Header); ok {
+			if !reflect.DeepEqual(header, data.Headers) {
+				t.Errorf("Got wrong value for header. Got: %v, expected: %v.", header, data.Headers)
+			}
+		} else {
+			t.Errorf("Got wrong type from context for key. Got %T, expected: %T.", val, []headers.Header{})
 		}
 	}
 }
