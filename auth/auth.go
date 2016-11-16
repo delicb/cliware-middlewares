@@ -1,3 +1,4 @@
+// Package auth contains middlewares for managing authentication during HTTP request.
 package auth
 
 import (
@@ -6,7 +7,7 @@ import (
 	c "go.delic.rs/cliware"
 )
 
-// Basic sets basic authentication to request with provided username and apssword.
+// Basic sets basic authentication to request with provided username and password.
 func Basic(username, password string) c.Middleware {
 	return c.RequestProcessor(func(req *http.Request) error {
 		req.SetBasicAuth(username, password)
