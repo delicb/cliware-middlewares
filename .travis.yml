@@ -1,0 +1,20 @@
+language: go
+
+go:
+  - 1.7
+
+go_import_path: go.delic.rs/cliware-middlewares
+
+script:
+  - go test -race -coverprofile=coverage.txt -covermode=atomic
+  - go test -race -coverprofile=coverage.txt -covermode=atomic ./auth
+  - go test -race -coverprofile=coverage.txt -covermode=atomic ./body
+  - go test -race -coverprofile=coverage.txt -covermode=atomic ./cookies
+  - go test -race -coverprofile=coverage.txt -covermode=atomic ./errors
+  - go test -race -coverprofile=coverage.txt -covermode=atomic ./headers
+  - go test -race -coverprofile=coverage.txt -covermode=atomic ./query
+  - go test -race -coverprofile=coverage.txt -covermode=atomic ./responsebody
+  - go test -race -coverprofile=coverage.txt -covermode=atomic ./url
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
