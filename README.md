@@ -1,12 +1,12 @@
 # Cliware middlewares
-[![GoDoc](http://godoc.org/github.com/delicb/cliware-middlewares?status.png)](http://godoc.org/github.com/delicb/cliware-middlewares)
+[![Go Report Card](https://goreportcard.com/badge/github.com/delicb/cliware-middlewares)](https://goreportcard.com/report/github.com/delicb/cliware-middlewares)
 [![Build Status](https://travis-ci.org/delicb/cliware-middlewares.svg?branch=master)](https://travis-ci.org/delicb/cliware-middlewares)
 [![codecov](https://codecov.io/gh/delicb/cliware-middlewares/branch/master/graph/badge.svg)](https://codecov.io/gh/delicb/cliware-middlewares)
+[![GoDoc](http://godoc.org/github.com/delicb/cliware-middlewares?status.png)](http://godoc.org/github.com/delicb/cliware-middlewares)
 
 This repository contains some useful middlewares for [Cliware](https://github.com/delicb/cliware)
 library.
 
-# Install
 # Install
 Run `go get go.delic.rs/cliware-middlewares` in terminal.
 
