@@ -75,7 +75,7 @@ func FromContext(key interface{}) c.Middleware {
 					}
 				}
 			default:
-				return nil, errors.New("Context value in unsupported format.")
+				return nil, errors.New("headers.FromContext middleware: value in unsupported format")
 			}
 			return next.Handle(ctx, req)
 		})
