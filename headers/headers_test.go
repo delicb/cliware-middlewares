@@ -264,44 +264,71 @@ func TestSetMap(t *testing.T) {
 	}
 }
 
-func TestFromContext(t *testing.T) {
+func TestFromContext_HeaderList(t *testing.T) {
 	for _, data := range []struct {
-		Key    string
-		Header string
-		Value  []string
-		Expect bool
+		Key           string
+		Value         interface{}
+		ExpectedError string
 	}{
 		{
-			Key:    "some-id",
-			Header: "My-Header",
-			Value:  []string{"my-value"},
-			Expect: true,
+			Key: "some-id",
+			Value: []headers.Header{
+				{
+					Key:   "Some header",
+					Value: []string{"My value"},
+				},
+			},
+			ExpectedError: "",
 		},
 		{
-			Key:    "",
-			Header: "Some header",
-			Value:  []string{},
-			Expect: false,
+			Key: "some-id",
+			Value: []headers.Header{
+				{
+					Key:   "Some header",
+					Value: []string{"My value"},
+				},
+				{
+					Key:   "My header",
+					Value: []string{"other value"},
+				},
+			},
+			ExpectedError: "",
+		},
+		{
+			Key:           "some-id",
+			Value:         "string",
+			ExpectedError: "headers.FromContext middleware: value in unsupported format",
 		},
 	} {
 		m := headers.FromContext(data.Key)
 		req := cliware.EmptyRequest()
-		ctx := context.Background()
-		ctx = context.WithValue(ctx, data.Key, headers.Header{
-			Key:   data.Header,
-			Value: data.Value,
-		})
+		var ctx context.Context
+		if headers, ok := data.Value.([]headers.Header); ok {
+			if len(headers) == 1 {
+				ctx = context.WithValue(context.Background(), data.Key, headers[0])
+			} else {
+				ctx = context.WithValue(context.Background(), data.Key, headers)
+			}
+		} else {
+			ctx = context.WithValue(context.Background(), data.Key, data.Value)
+		}
+
 		_, err := m.Exec(createHandler()).Handle(ctx, req)
 		if err != nil {
-			t.Error(err)
-		}
-		rawHeader, ok := req.Header[data.Header]
-		if !ok && data.Expect {
-			t.Fatalf("Header %s not found in request.", data.Header)
-		}
-		if data.Expect {
-			if !reflect.DeepEqual(rawHeader, data.Value) {
-				t.Errorf("Wrong header value set. Got: %v, expected: %v.", req.Header.Get(data.Header), data.Value)
+			if data.ExpectedError == "" {
+				t.Errorf("Did not expect error, got: %s.", data.ExpectedError)
+			} else if err.Error() != data.ExpectedError {
+				t.Errorf("Got wrong error. Got: %s, expected: %s.", err, data.ExpectedError)
+			}
+		} else {
+			for _, h := range data.Value.([]headers.Header) {
+				rawHeader, ok := req.Header[h.Key]
+				if !ok {
+					t.Fatalf("Header %s not found in request.", h.Key)
+				}
+				if !reflect.DeepEqual(rawHeader, h.Value) {
+					t.Errorf("Wrong header value set. Got: %v, expected: %v.", rawHeader, h.Value)
+				}
 			}
 		}
 	}
