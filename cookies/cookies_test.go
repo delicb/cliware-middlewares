@@ -131,9 +131,9 @@ func TestSet(t *testing.T) {
 
 func TestDelAll(t *testing.T) {
 	for _, existing := range [][]*http.Cookie{
-		[]*http.Cookie{},
-		[]*http.Cookie{&http.Cookie{}},
-		[]*http.Cookie{{Name: "some-cookie", Value: "cookie value"}, {Name: "other-cookie", Value: "other value"}},
+		{},
+		{{}},
+		{{Name: "some-cookie", Value: "cookie value"}, {Name: "other-cookie", Value: "other value"}},
 	} {
 		m := cookies.DelAll()
 		chain := cliware.NewChain(m)
