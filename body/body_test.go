@@ -103,21 +103,3 @@ func createHandler() cliware.Handler {
 		return nil, nil
 	})
 }
-
-// type handler struct {
-// 	// fn     m.RequestHandler
-// 	called bool
-// }
-
-// func (h *handler) Handle(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
-// 	h.called = true
-// 	return nil, nil
-// }
-
-// func newHandler() *handler {
-// 	h := &handler{}
-// 	// h.fn = m.RequestHandlerFunc(func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
-// 	// 	h.called = true
-// 	// })
-// 	return h
-// }
