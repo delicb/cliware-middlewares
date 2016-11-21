@@ -6,8 +6,6 @@ import (
 
 	"time"
 
-	"fmt"
-
 	c "go.delic.rs/cliware"
 )
 
@@ -21,8 +19,6 @@ func Enable(client *http.Client) c.Middleware {
 	}
 	return c.MiddlewareFunc(func(next c.Handler) c.Handler {
 		return c.HandlerFunc(func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
-			fmt.Println("In retry middleware")
-
 			// if retryTransport is already set no need to do it again
 			if _, ok := client.Transport.(*retryTransport); ok {
 				return next.Handle(ctx, req)
