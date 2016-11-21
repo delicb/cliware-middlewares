@@ -62,6 +62,25 @@ func TestBearer(t *testing.T) {
 	}
 }
 
+func TestCustom(t *testing.T) {
+	header := "OAuth oauth_consumer_key=\"foobar\""
+	m := auth.Custom(header)
+	chain := cliware.NewChain(m)
+	req := cliware.EmptyRequest()
+	chain.Exec(createHandler()).Handle(nil, req)
+	val, ok := req.Header["Authorization"]
+	if !ok {
+		t.Error("Expected request to have Authorization header, none found.")
+	}
+	if len(val) != 1 {
+		t.Fatalf("Expected only one Authorization header, found: %d.", len(val))
+	}
+	authVal := val[0]
+	if authVal != header {
+		t.Errorf("Wrong value for Authorization header. Got: %s, expected: %s", authVal, header)
+	}
+}
+
 func createHandler() cliware.Handler {
 	return cliware.HandlerFunc(func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
 		return nil, nil

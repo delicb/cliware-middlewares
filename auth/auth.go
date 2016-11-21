@@ -22,3 +22,11 @@ func Bearer(token string) c.Middleware {
 		return nil
 	})
 }
+
+// Custom sets a custom authorization header.
+func Custom(authorization string) c.Middleware {
+	return c.RequestProcessor(func(req *http.Request) error {
+		req.Header.Set("Authorization", authorization)
+		return nil
+	})
+}
