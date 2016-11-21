@@ -2,7 +2,6 @@ package retry
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
