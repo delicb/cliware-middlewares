@@ -73,9 +73,6 @@ func (t *retryTransport) RoundTrip(r *http.Request) (*http.Response, error) {
 
 		// check if we reached any of conditions for stopping retry cycle
 		currentDuration := time.Now().UTC().Sub(start)
-		fmt.Println(!classifier(resp, err))
-		fmt.Println(count > maxRetries)
-		fmt.Println(currentDuration.Nanoseconds() > maxDuration.Nanoseconds())
 		if !classifier(resp, err) || count > maxRetries || currentDuration.Nanoseconds() > maxDuration.Nanoseconds() {
 			return resp, err
 		}
