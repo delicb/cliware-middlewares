@@ -37,19 +37,15 @@ func (t *retryTransport) RoundTrip(r *http.Request) (*http.Response, error) {
 	maxRetries := getRetryTimes(r.Context())
 	maxDuration := geMaxDuration(r.Context())
 	if classifier == nil {
-		fmt.Println("Using default classifier")
 		classifier = defaultClassifier
 	}
 	if backoff == nil {
-		fmt.Println("using default backoff")
 		backoff = defaultBackoff
 	}
 	if maxRetries == 0 {
-		fmt.Println("Using default max retries")
 		maxRetries = defaultMaxRetries
 	}
 	if maxDuration == time.Duration(0) {
-		fmt.Println("Using default max duration")
 		maxDuration = defaultMaxTime
 	}
 
