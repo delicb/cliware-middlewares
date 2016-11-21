@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"encoding/json"
+	"encoding/xml"
 	"reflect"
 
 	"go.delic.rs/cliware"
@@ -91,6 +92,69 @@ func TestJSON(t *testing.T) {
 		err = json.Unmarshal(bodyBytes, body)
 		if err != nil {
 			t.Error("Failed to unmarshal response json: ", err)
+		}
+		if !reflect.DeepEqual(body, data.ResponseData) {
+			t.Errorf("Wrong body. Expected: %v, got: %v.", data.ResponseData, body)
+		}
+	}
+}
+
+func TestXML(t *testing.T) {
+	type person struct {
+		Name    string
+		DOB     string
+		XMLName string `xml:"Person"`
+	}
+
+	type testCase struct {
+		Data          interface{}
+		ResponseData  *person
+		ExpectedError error
+	}
+
+	tests := []testCase{
+		{
+			Data:          `<Person><Name>Foobar Barfoo</Name><DOB>11-12-1984</DOB></Person>`,
+			ResponseData:  &person{Name: "Foobar Barfoo", DOB: "11-12-1984"},
+			ExpectedError: nil,
+		},
+		{
+			Data:          []byte(`<Person><Name>Foobar Barfoo</Name><DOB>11-12-1984</DOB></Person>`),
+			ResponseData:  &person{Name: "Foobar Barfoo", DOB: "11-12-1984"},
+			ExpectedError: nil,
+		},
+		{
+			Data:          &person{Name: "Foobar Barfoo", DOB: "11-12-1984"},
+			ResponseData:  &person{Name: "Foobar Barfoo", DOB: "11-12-1984"},
+			ExpectedError: nil,
+		},
+	}
+
+	for _, data := range tests {
+		req := cliware.EmptyRequest()
+		handler := createHandler()
+		_, err := body.XML(data.Data).Exec(handler).Handle(nil, req)
+		if data.ExpectedError != nil {
+			if data.ExpectedError != err {
+				t.Errorf("Wrong error. Expected: %s, got: %s", data.ExpectedError, err)
+			}
+		} else {
+			if err != nil {
+				t.Error("Got unexpected error processing request: ", err)
+			}
+		}
+
+		if req.Method != "POST" {
+			t.Error("Wrong request method. Expected: POST, got: ", req.Method)
+		}
+		if req.Header.Get("Content-Type") != "application/xml" {
+			t.Error("Wrong content-type. Expected application/xml, got: ", req.Header.Get("Content-Type"))
+		}
+		bodyBytes, _ := ioutil.ReadAll(req.Body)
+		body := &person{}
+		err = xml.Unmarshal(bodyBytes, body)
+		if err != nil {
+			t.Error("Failed to unmarshal body xml: ", err)
 		}
 		if !reflect.DeepEqual(body, data.ResponseData) {
 			t.Errorf("Wrong body. Expected: %v, got: %v.", data.ResponseData, body)
