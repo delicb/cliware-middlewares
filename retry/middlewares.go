@@ -6,37 +6,10 @@ import (
 
 	"time"
 
+	"io"
+
 	c "go.delic.rs/cliware"
 )
-
-// Enable modifies transport for provided client to support retry mechanism.
-// All this does is to set Transport to retryTransport defined here. Transport
-// that is already set to provided client will be used to send actual request,
-// so any config in it will be used.
-func Enable(client *http.Client) c.Middleware {
-	if client == nil {
-		panic("EnableRetry: nil client")
-	}
-	return c.MiddlewareFunc(func(next c.Handler) c.Handler {
-		return c.HandlerFunc(func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
-			// if retryTransport is already set no need to do it again
-			if _, ok := client.Transport.(*retryTransport); ok {
-				return next.Handle(ctx, req)
-			}
-
-			// set transport to retryTransport
-			var originalTransport http.RoundTripper
-			if client.Transport != nil {
-				originalTransport = client.Transport
-			} else {
-				originalTransport = http.DefaultTransport
-			}
-			client.Transport = NewRetryTransport(originalTransport)
-			// send request
-			return next.Handle(ctx, req)
-		})
-	})
-}
 
 // Times sets maximum number of times for HTTP request sending retry.
 func Times(times int) c.Middleware {
@@ -66,4 +39,21 @@ func MaxDuration(maxTime time.Duration) c.Middleware {
 	return c.ContextProcessor(func(ctx context.Context) context.Context {
 		return setMaxDuration(ctx, maxTime)
 	})
+}
+
+// BodyStrategy sets strategy of how to handle request body for retries requests.
+func BodyStrategy(strategy func(r *http.Request) (func() io.ReadCloser, error)) c.Middleware {
+	return c.ContextProcessor(func(ctx context.Context) context.Context {
+		return setBodyStrategy(ctx, RetryBodyStrategy(strategy))
+	})
+}
+
+// Methods sets list of HTTP methods for which it is valid to retry failed requests.
+// For example, if only GET is defined as valid retry HTTP methods, no POST or
+// PUT (or any other) request will be retried. This might be useful if you are not
+// sure about server idempotence.
+func Methods(methods ...string) c.Middleware {
+	return c.ContextProcessor((func(ctx context.Context) context.Context {
+		return setRetryMethods(ctx, methods...)
+	}))
 }
