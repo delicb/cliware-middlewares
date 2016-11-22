@@ -50,18 +50,25 @@ func (t *retryTransport) RoundTrip(r *http.Request) (*http.Response, error) {
 
 	start := time.Now().UTC()
 
-	// buffer request body for potentially repeated requests
-	buf, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		return nil, err
+	var buf []byte
+	var bodyErr error
+	// check required because Body is nil if request is result of previous
+	// request that returned redirect
+	if r.Body != nil {
+		buf, bodyErr = ioutil.ReadAll(r.Body)
+		if bodyErr != nil {
+			return nil, bodyErr
+		}
+		r.Body.Close()
 	}
-	r.Body.Close()
 
 	for {
 		// Copy request and sets its body to appropriate value
 		reqCopy := &http.Request{}
 		*reqCopy = *r
-		reqCopy.Body = ioutil.NopCloser(bytes.NewBuffer(buf))
+		if buf != nil {
+			reqCopy.Body = ioutil.NopCloser(bytes.NewBuffer(buf))
+		}
 
 		// perform actual request
 		resp, err := t.next.RoundTrip(reqCopy)
