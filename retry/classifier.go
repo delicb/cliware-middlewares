@@ -4,7 +4,7 @@ import "net/http"
 
 // Classifier is function that determines if request should be retried.
 // Boolean return value indicates if request should be repeated or not.
-type Classifier func(resp *http.Response, err error) bool
+type Classifier func(resp *http.Response, err error) (shouldRetry bool)
 
 // AnyErrorClassifier is classifier that indicates that all requests that return
 // errors should be retried.
