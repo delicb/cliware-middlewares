@@ -7,8 +7,6 @@ import (
 
 	"reflect"
 
-	"fmt"
-
 	"time"
 
 	"go.delic.rs/cliware"
@@ -16,7 +14,6 @@ import (
 )
 
 func TestMethod(t *testing.T) {
-	fmt.Print()
 	for _, method := range []string{
 		"GET", "POST", "PUT", "ANYTHING",
 	} {

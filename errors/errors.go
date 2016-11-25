@@ -29,8 +29,12 @@ func createError(resp *http.Response) error {
 	if resp.StatusCode < 400 {
 		return nil
 	}
-	defer resp.Body.Close()
-	rawData, _ := ioutil.ReadAll(resp.Body)
+	var rawData []byte
+	if resp.Body != nil {
+		rawData, _ = ioutil.ReadAll(resp.Body)
+		defer resp.Body.Close()
+	}
+
 	return &HTTPError{
 		Name:       resp.Status,
 		StatusCode: resp.StatusCode,
