@@ -11,6 +11,8 @@ import (
 
 	"strings"
 
+	"io"
+
 	c "go.delic.rs/cliware"
 )
 
@@ -70,6 +72,31 @@ func XML(data interface{}) c.Middleware {
 		req.Body = ioutil.NopCloser(buff)
 		req.ContentLength = int64(buff.Len())
 		req.Header.Set("Content-Type", "application/xml")
+		return nil
+	})
+}
+
+// Reader sets request body to contain content from provided reader.
+// Content type header is not set by this middleware.
+func Reader(body io.Reader) c.Middleware {
+	return c.RequestProcessor(func(req *http.Request) error {
+		rc, ok := body.(io.ReadCloser)
+		if !ok && body != nil {
+			rc = ioutil.NopCloser(body)
+		}
+
+		if body != nil {
+			switch v := body.(type) {
+			case *bytes.Buffer:
+				req.ContentLength = int64(v.Len())
+			case *bytes.Reader:
+				req.ContentLength = int64(v.Len())
+			case *strings.Reader:
+				req.ContentLength = int64(v.Len())
+			}
+		}
+		req.Body = rc
+		req.Method = getMethod(req)
 		return nil
 	})
 }
