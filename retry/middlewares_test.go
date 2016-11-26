@@ -89,7 +89,7 @@ func TestBodyStrategy(t *testing.T) {
 	for _, strategy := range []BodyStrategy{
 		BodyStrategy(func(r *http.Request) (func() io.ReadCloser, error) { return nil, nil }),
 	} {
-		m := BodyStrategy(strategy)
+		m := SetBodyStrategy(strategy)
 		var resultContext context.Context
 		initialContext := context.Background()
 		_, err := m.Exec(createHandler(&resultContext)).Handle(initialContext, nil)
