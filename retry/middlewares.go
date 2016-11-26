@@ -41,7 +41,7 @@ func MaxDuration(maxTime time.Duration) c.Middleware {
 	})
 }
 
-// BodyStrategy sets strategy of how to handle request body for retries requests.
+// SetBodyStrategy sets strategy of how to handle request body for retries requests.
 func SetBodyStrategy(strategy func(r *http.Request) (func() io.ReadCloser, error)) c.Middleware {
 	return c.ContextProcessor(func(ctx context.Context) context.Context {
 		return setBodyStrategy(ctx, BodyStrategy(strategy))
