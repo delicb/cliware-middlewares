@@ -2,6 +2,7 @@ package body_test
 
 import (
 	"context"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -9,6 +10,10 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"reflect"
+
+	"bytes"
+
+	"strings"
 
 	"go.delic.rs/cliware"
 	"go.delic.rs/cliware-middlewares/body"
@@ -158,6 +163,44 @@ func TestXML(t *testing.T) {
 		}
 		if !reflect.DeepEqual(body, data.ResponseData) {
 			t.Errorf("Wrong body. Expected: %v, got: %v.", data.ResponseData, body)
+		}
+	}
+}
+
+func TestReader(t *testing.T) {
+	for _, data := range []struct {
+		Reader       io.Reader
+		ResponseData interface{}
+		ExpectError  error
+	}{
+		{
+			Reader:       bytes.NewBuffer([]byte("data")),
+			ResponseData: "data",
+			ExpectError:  nil,
+		},
+		{
+			Reader:       bytes.NewReader([]byte("data")),
+			ResponseData: "data",
+			ExpectError:  nil,
+		},
+		{
+			Reader:       strings.NewReader("data"),
+			ResponseData: "data",
+			ExpectError:  nil,
+		},
+	} {
+		req := cliware.EmptyRequest()
+		handler := createHandler()
+		_, err := body.Reader(data.Reader).Exec(handler).Handle(nil, req)
+		if data.ExpectError != nil {
+			if data.ExpectError.Error() != err.Error() {
+				t.Errorf("Wrong error. Expected: %s, got: %s", data.ExpectError.Error(), err.Error())
+			}
+		}
+		bodyBytes, _ := ioutil.ReadAll(req.Body)
+		body := string(bodyBytes)
+		if !reflect.DeepEqual(body, data.ResponseData) {
+			t.Errorf("Wrong body. Expected: %s, got: %s", data.ResponseData, body)
 		}
 	}
 }
