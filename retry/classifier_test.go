@@ -63,7 +63,7 @@ func TestOrClassifier(t *testing.T) {
 		},
 		{
 			Classifiers: []retry.Classifier{},
-			Result: false,
+			Result:      false,
 		},
 	} {
 		res := retry.OrClassifier(data.Classifiers...)(nil, nil)
@@ -74,27 +74,27 @@ func TestOrClassifier(t *testing.T) {
 }
 
 func TestAndClassifier(t *testing.T) {
-	for _, data := range []struct{
+	for _, data := range []struct {
 		Classifiers []retry.Classifier
-		Result bool
+		Result      bool
 	}{
 		{
 			Classifiers: []retry.Classifier{trueClassifier, trueClassifier},
-			Result: true,
+			Result:      true,
 		},
 		{
 			Classifiers: []retry.Classifier{trueClassifier, falseClassifier},
-			Result: false,
+			Result:      false,
 		},
 		{
 			Classifiers: []retry.Classifier{falseClassifier, falseClassifier},
-			Result: false,
+			Result:      false,
 		},
 		{
 			Classifiers: []retry.Classifier{},
-			Result: false,
+			Result:      false,
 		},
-	}{
+	} {
 		res := retry.AndClassifier(data.Classifiers...)(nil, nil)
 		if res != data.Result {
 			t.Errorf("AndClassifier returned wrong value. Got: %t, expected: %t.", res, data.Result)

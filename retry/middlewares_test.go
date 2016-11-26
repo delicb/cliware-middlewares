@@ -106,9 +106,9 @@ func TestBodyStrategy(t *testing.T) {
 
 func TestMethods(t *testing.T) {
 	for _, methods := range [][]string{
-		[]string{},
-		[]string{"GET"},
-		[]string{"GET", "POST", "PUT"},
+		{},
+		{"GET"},
+		{"GET", "POST", "PUT"},
 	} {
 		m := Methods(methods...)
 		var resultContext context.Context
