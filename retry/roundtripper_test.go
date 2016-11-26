@@ -60,7 +60,7 @@ func TestRetryTransport_RoundTrip(t *testing.T) {
 		MaxDuration   time.Duration
 		HTTPMethods   []string
 		SendMethod    string
-		BodyStrategy  RetryBodyStrategy
+		BodyStrategy  BodyStrategy
 		ExpectedError string
 	}{
 		{

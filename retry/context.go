@@ -85,18 +85,18 @@ func getClassifier(ctx context.Context) Classifier {
 
 // setBodyStrategy sets provided body strategy to provided context and returns
 // new context.
-func setBodyStrategy(ctx context.Context, bodyStrategy RetryBodyStrategy) context.Context {
+func setBodyStrategy(ctx context.Context, bodyStrategy BodyStrategy) context.Context {
 	return context.WithValue(ctx, bodyStrategyKey, bodyStrategy)
 }
 
 // getBodyStrategy returns body strategy from provided context or nil if provided
 // context does not contain value for body strategy.
-func getBodyStrategy(ctx context.Context) RetryBodyStrategy {
+func getBodyStrategy(ctx context.Context) BodyStrategy {
 	bodyStrategy := ctx.Value(bodyStrategyKey)
 	if bodyStrategy == nil {
 		return nil
 	}
-	return bodyStrategy.(RetryBodyStrategy)
+	return bodyStrategy.(BodyStrategy)
 }
 
 // setRetryMethods sets provided list of HTTP methods to provided context as

@@ -86,8 +86,8 @@ func TestMaxDuration(t *testing.T) {
 }
 
 func TestBodyStrategy(t *testing.T) {
-	for _, strategy := range []RetryBodyStrategy{
-		RetryBodyStrategy(func(r *http.Request) (func() io.ReadCloser, error) { return nil, nil }),
+	for _, strategy := range []BodyStrategy{
+		BodyStrategy(func(r *http.Request) (func() io.ReadCloser, error) { return nil, nil }),
 	} {
 		m := BodyStrategy(strategy)
 		var resultContext context.Context

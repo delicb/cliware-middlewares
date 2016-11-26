@@ -13,7 +13,7 @@ import (
 // should provide io.ReadCloser that will be set to every subsequent request
 // body. This function will be called multiple times (as many times as request
 // is retried).
-type RetryBodyStrategy func(r *http.Request) (func() io.ReadCloser, error)
+type BodyStrategy func(r *http.Request) (func() io.ReadCloser, error)
 
 // CacheBodyStrategy caches initial request body in buffer and returns it
 // every time it is needed.

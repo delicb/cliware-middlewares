@@ -55,7 +55,7 @@ type retryTransportConfig struct {
 	Backoff      BackoffStrategy
 	MaxRetries   int
 	MaxDuration  time.Duration
-	BodyStrategy RetryBodyStrategy
+	BodyStrategy BodyStrategy
 	RetryMethods []string
 }
 
