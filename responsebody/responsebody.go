@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"io"
+
 	c "go.delic.rs/cliware"
 )
 
@@ -37,6 +39,20 @@ func String(data *string) c.Middleware {
 			return err
 		}
 		*data = string(rawData)
+		return nil
+	})
+}
+
+// Writer reads response body and writes it to provided writer.
+func Writer(w io.Writer) c.Middleware {
+	return c.ResponseProcessor(func(resp *http.Response, err error) error {
+		if err != nil {
+			return err
+		}
+		defer resp.Body.Close()
+		if _, err = io.Copy(w, resp.Body); err != nil {
+			return err
+		}
 		return nil
 	})
 }
