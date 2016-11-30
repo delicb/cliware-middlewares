@@ -1,5 +1,5 @@
 // Package auth contains middlewares for managing authentication during HTTP request.
-package auth
+package auth // import "go.delic.rs/cliware-middlewares/auth"
 
 import (
 	"net/http"
