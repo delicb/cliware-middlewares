@@ -32,15 +32,17 @@ func String(data string) c.Middleware {
 func JSON(data interface{}) c.Middleware {
 	return c.RequestProcessor(func(req *http.Request) error {
 		buff := &bytes.Buffer{}
+		var err error
 		switch data.(type) {
 		case string:
-			buff.WriteString(data.(string))
+			_, err = buff.WriteString(data.(string))
 		case []byte:
-			buff.Write(data.([]byte))
+			_, err = buff.Write(data.([]byte))
 		default:
-			if err := json.NewEncoder(buff).Encode(data); err != nil {
-				return err
-			}
+			err = json.NewEncoder(buff).Encode(data)
+		}
+		if err != nil {
+			return err
 		}
 
 		req.Method = getMethod(req)
@@ -57,16 +59,17 @@ func JSON(data interface{}) c.Middleware {
 func XML(data interface{}) c.Middleware {
 	return c.RequestProcessor(func(req *http.Request) error {
 		buff := &bytes.Buffer{}
+		var err error
 		switch data.(type) {
 		case string:
-			buff.WriteString(data.(string))
-
+			_, err = buff.WriteString(data.(string))
 		case []byte:
-			buff.Write(data.([]byte))
+			_, err = buff.Write(data.([]byte))
 		default:
-			if err := xml.NewEncoder(buff).Encode(data); err != nil {
-				return err
-			}
+			err = xml.NewEncoder(buff).Encode(data)
+		}
+		if err != nil {
+			return err
 		}
 		req.Method = getMethod(req)
 		req.Body = ioutil.NopCloser(buff)
