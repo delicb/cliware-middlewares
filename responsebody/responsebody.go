@@ -51,9 +51,7 @@ func Writer(w io.Writer) c.Middleware {
 			return err
 		}
 		defer resp.Body.Close()
-		if _, err = io.Copy(w, resp.Body); err != nil {
-			return err
-		}
-		return nil
+		_, err = io.Copy(w, resp.Body)
+		return err
 	})
 }
