@@ -32,6 +32,11 @@ Currently following packages exist:
 * retry - request retry mechanism based on custom classifier and with custom backoff
 * url - handling URL endpoint for request (base URL, path)
 
+
+# Contribution
+Any contribution is welcome. If you find this code useful, please let me know.
+If you find bugs - feel free to open an issue, or, even better, new pull request.
+
 # Credits
 Idea and bunch of implementation details were taken from cool GoLang HTTP client
 [Gentleman](https://github.com/h2non/gentleman). Difference is that these middewares
