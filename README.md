@@ -11,18 +11,35 @@ library.
 # Install
 Run `go get go.delic.rs/cliware-middlewares` in terminal.
 
+# Usage
+Cliware middlewares are set of tools that can be used to create useful HTTP clients.
+On there own they do not do much, but to see how they they can be used to put
+together cool HTTP client, take a loko at [GWC](https://github.com/delicb/gwc) (HTTP
+client built on top of Cliware and Cliware-middlewares).
 
 # Content
 Middlewares are separated per packages that can be useful on their own. This is done
-because not everybody needs all middlewares. Currently following packages exist:
+to avoid dependencies between middlewars and create cleaner naming schema. 
+Currently following packages exist:
 
-* body - handling request body (JSON, XML, string)
+* auth - authentication via header support
+* body - handling request body, support setting JSON, XML, string and from io.Reader
 * cookies - handling request cookies (add, set, delete)
+* errors - handling HTTP error status codes and converting them to GoLang errors
 * headers - handling request headers (add, set, delete)
 * query - handling request query parameters (add, set, delete)
+* responsebody - managing respones body, get json, string or write raw content to own writer
+* retry - request retry mechanism based on custom classifier and with custom backoff
 * url - handling URL endpoint for request (base URL, path)
 
 # Credits
 Idea and bunch of implementation details were taken from cool GoLang HTTP client
 [Gentleman](https://github.com/h2non/gentleman). Difference is that these middewares
 are based on Cliware, instead of Gentleman builtin plugin mechanism.
+
+Some ideas for retry middlewares are from [go-resiliency](https://github.com/eapache/go-resiliency)
+project.
+
+# Licence
+Cliware-middlewares is released under MIT licence.
+
