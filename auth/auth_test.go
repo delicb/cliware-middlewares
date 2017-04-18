@@ -7,8 +7,8 @@ import (
 
 	"strings"
 
-	"go.delic.rs/cliware"
-	"go.delic.rs/cliware-middlewares/auth"
+	"github.com/delicb/cliware"
+	"github.com/delicb/cliware-middlewares/auth"
 )
 
 func TestBasic(t *testing.T) {

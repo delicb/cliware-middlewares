@@ -15,8 +15,8 @@ import (
 
 	"strings"
 
-	"go.delic.rs/cliware"
-	"go.delic.rs/cliware-middlewares/body"
+	"github.com/delicb/cliware"
+	"github.com/delicb/cliware-middlewares/body"
 )
 
 func TestString(t *testing.T) {

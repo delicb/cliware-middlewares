@@ -9,4 +9,4 @@
 // Setting this RoundTripper is something that client library should do
 // (like go.delic.rs/gwc), so, in general, for writing simple endpoints
 // there should be no need to use it.
-package retry // import "go.delic.rs/cliware-middlewares/retry"
+package retry

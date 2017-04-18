@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"reflect"
 
-	"go.delic.rs/cliware"
-	"go.delic.rs/cliware-middlewares/cookies"
+	"github.com/delicb/cliware"
+	"github.com/delicb/cliware-middlewares/cookies"
 )
 
 func cookieInSlice(a *http.Cookie, list []*http.Cookie) bool {

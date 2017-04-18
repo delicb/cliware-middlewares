@@ -8,7 +8,7 @@ import (
 
 	"io"
 
-	c "go.delic.rs/cliware"
+	c "github.com/delicb/cliware"
 )
 
 // Times sets maximum number of times for HTTP request sending retry.

@@ -9,8 +9,8 @@ import (
 
 	"time"
 
-	"go.delic.rs/cliware"
-	"go.delic.rs/cliware-middlewares/headers"
+	"github.com/delicb/cliware"
+	"github.com/delicb/cliware-middlewares/headers"
 )
 
 func TestMethod(t *testing.T) {

@@ -1,5 +1,5 @@
 // Package responsebody contains middlewares for reading body of HTTP response in different ways.
-package responsebody // import "go.delic.rs/cliware-middlewares/responsebody"
+package responsebody
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 
 	"io"
 
-	c "go.delic.rs/cliware"
+	c "github.com/delicb/cliware"
 )
 
 // JSON decodes response body from JSON format into provided interface.

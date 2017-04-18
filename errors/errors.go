@@ -1,5 +1,5 @@
 // Package errors contains middlewares for converting HTTP response codes to GoLang errors.
-package errors // import "go.delic.rs/cliware-middlewares/errors"
+package errors
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 
 	"io/ioutil"
 
-	c "go.delic.rs/cliware"
+	c "github.com/delicb/cliware"
 )
 
 // HTTPError holds information about failed HTTP request.

@@ -1,10 +1,10 @@
 // Package query contains middlewares for manipulating query string on request.
-package query // import "go.delic.rs/cliware-middlewares/query"
+package query
 
 import (
 	"net/http"
 
-	c "go.delic.rs/cliware"
+	c "github.com/delicb/cliware"
 )
 
 // Set sets value as query parameter with provided key to URL.

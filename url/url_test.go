@@ -9,8 +9,8 @@ import (
 
 	"reflect"
 
-	"go.delic.rs/cliware"
-	"go.delic.rs/cliware-middlewares/url"
+	"github.com/delicb/cliware"
+	"github.com/delicb/cliware-middlewares/url"
 )
 
 type testData struct {

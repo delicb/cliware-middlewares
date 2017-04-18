@@ -10,7 +10,7 @@ import (
 	"io"
 	"reflect"
 
-	"go.delic.rs/cliware"
+	"github.com/delicb/cliware"
 )
 
 func TestTimes(t *testing.T) {

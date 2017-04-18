@@ -1,10 +1,10 @@
 // Package auth contains middlewares for managing authentication during HTTP request.
-package auth // import "go.delic.rs/cliware-middlewares/auth"
+package auth
 
 import (
 	"net/http"
 
-	c "go.delic.rs/cliware"
+	c "github.com/delicb/cliware"
 )
 
 // Basic sets basic authentication to request with provided username and password.

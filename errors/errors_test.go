@@ -14,8 +14,8 @@ import (
 
 	"regexp"
 
-	"go.delic.rs/cliware"
-	"go.delic.rs/cliware-middlewares/errors"
+	"github.com/delicb/cliware"
+	"github.com/delicb/cliware-middlewares/errors"
 )
 
 func TestErrors(t *testing.T) {

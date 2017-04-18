@@ -9,7 +9,7 @@ This repository contains some useful middlewares for [Cliware](https://github.co
 library.
 
 # Install
-Run `go get go.delic.rs/cliware-middlewares` in terminal.
+Run `go get github.com/delicb/cliware-middlewares` in terminal.
 
 # Usage
 Cliware middlewares are set of tools that can be used to create useful HTTP clients.

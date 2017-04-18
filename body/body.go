@@ -1,5 +1,5 @@
 // Package body contains middlewares for manipulating body of a request.
-package body // import "go.delic.rs/cliware-middlewares/body"
+package body
 
 import (
 	"bytes"
@@ -13,7 +13,7 @@ import (
 
 	"io"
 
-	c "go.delic.rs/cliware"
+	c "github.com/delicb/cliware"
 )
 
 // String sets request body to provided string.

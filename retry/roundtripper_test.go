@@ -5,11 +5,11 @@ import (
 	"testing"
 	"time"
 
+	"context"
 	"errors"
 	"io"
 
-	"go.delic.rs/cliware"
-	"golang.org/x/net/context"
+	"github.com/delicb/cliware"
 )
 
 type mockRoundTripper struct {

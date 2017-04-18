@@ -1,5 +1,5 @@
 // Package headers contains middlewares for manipulating headers on request.
-package headers // import "go.delic.rs/cliware-middlewares/headers"
+package headers
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 
 	"errors"
 
-	c "go.delic.rs/cliware"
+	c "github.com/delicb/cliware"
 )
 
 // Method sets request method to ongoing request.

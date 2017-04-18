@@ -11,8 +11,8 @@ import (
 
 	"bytes"
 
-	"go.delic.rs/cliware"
-	"go.delic.rs/cliware-middlewares/responsebody"
+	"github.com/delicb/cliware"
+	"github.com/delicb/cliware-middlewares/responsebody"
 )
 
 func TestJSON(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"go.delic.rs/cliware-middlewares/retry"
+	"github.com/delicb/cliware-middlewares/retry"
 )
 
 func TestConstantBackoff(t *testing.T) {

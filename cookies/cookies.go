@@ -1,10 +1,10 @@
 // Package cookies contains middlewares for manipulating cookies on request.
-package cookies // import "go.delic.rs/cliware-middlewares/cookies"
+package cookies
 
 import (
 	"net/http"
 
-	c "go.delic.rs/cliware"
+	c "github.com/delicb/cliware"
 )
 
 // Add adds provided cookie to request.
