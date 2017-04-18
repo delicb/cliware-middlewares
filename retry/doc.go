@@ -7,6 +7,6 @@
 // requests, so you can still apply you custom settings.
 //
 // Setting this RoundTripper is something that client library should do
-// (like go.delic.rs/gwc), so, in general, for writing simple endpoints
+// (like github.com/delicb/gwc), so, in general, for writing simple endpoints
 // there should be no need to use it.
 package retry
