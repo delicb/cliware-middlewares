@@ -2,7 +2,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/delicb/cliware-middlewares)](https://goreportcard.com/report/github.com/delicb/cliware-middlewares)
 [![Build Status](https://travis-ci.org/delicb/cliware-middlewares.svg?branch=master)](https://travis-ci.org/delicb/cliware-middlewares)
 [![codecov](https://codecov.io/gh/delicb/cliware-middlewares/branch/master/graph/badge.svg)](https://codecov.io/gh/delicb/cliware-middlewares)
-![status](https://img.shields.io/badge/status-beta-red.svg)
+![status](https://img.shields.io/badge/status-beta-orange.svg)
 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/delicb/cliware-middlewares)
 
 This repository contains some useful middlewares for [Cliware](https://github.com/delicb/cliware)
