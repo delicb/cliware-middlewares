@@ -61,8 +61,8 @@ type Header struct {
 // FromContext adds header to request that is defined in context with provided key.
 func FromContext(key interface{}) c.Middleware {
 	return c.MiddlewareFunc(func(next c.Handler) c.Handler {
-		return c.HandlerFunc(func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
-			value := ctx.Value(key)
+		return c.HandlerFunc(func(req *http.Request) (resp *http.Response, err error) {
+			value := req.Context().Value(key)
 			switch header := value.(type) {
 			case Header:
 				for _, v := range header.Value {
@@ -77,7 +77,7 @@ func FromContext(key interface{}) c.Middleware {
 			default:
 				return nil, errors.New("headers.FromContext middleware: value in unsupported format")
 			}
-			return next.Handle(ctx, req)
+			return next.Handle(req)
 		})
 	})
 }

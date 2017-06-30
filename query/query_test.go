@@ -1,7 +1,6 @@
 package query_test
 
 import (
-	"context"
 	"net/http"
 	"testing"
 
@@ -41,7 +40,7 @@ func TestSet(t *testing.T) {
 		}
 		req.URL = parsedURL
 		handler := createHandler()
-		m.Exec(handler).Handle(nil, req)
+		m.Exec(handler).Handle(req)
 
 		q, err := neturl.ParseQuery(data.ResultingQuery)
 		if err != nil {
@@ -82,7 +81,7 @@ func TestAdd(t *testing.T) {
 		}
 		req.URL = parsedURL
 		handler := createHandler()
-		m.Exec(handler).Handle(nil, req)
+		m.Exec(handler).Handle(req)
 
 		q, err := neturl.ParseQuery(data.ResultingQuery)
 		if err != nil {
@@ -120,7 +119,7 @@ func TestDel(t *testing.T) {
 		}
 		req.URL = parsedURL
 		handler := createHandler()
-		m.Exec(handler).Handle(nil, req)
+		m.Exec(handler).Handle(req)
 
 		q, err := neturl.ParseQuery(data.ResultingQuery)
 		if err != nil {
@@ -146,7 +145,7 @@ func TestDelAll(t *testing.T) {
 		}
 		req.URL = parsedURL
 		handler := createHandler()
-		m.Exec(handler).Handle(nil, req)
+		m.Exec(handler).Handle(req)
 
 		q := neturl.Values{}
 
@@ -186,7 +185,7 @@ func TestSetMap(t *testing.T) {
 		}
 		req.URL = parsedURL
 		handler := createHandler()
-		m.Exec(handler).Handle(nil, req)
+		m.Exec(handler).Handle(req)
 
 		q, err := neturl.ParseQuery(data.ResultingQuery)
 		if err != nil {
@@ -200,7 +199,7 @@ func TestSetMap(t *testing.T) {
 }
 
 func createHandler() cliware.Handler {
-	return cliware.HandlerFunc(func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
+	return cliware.HandlerFunc(func(req *http.Request) (resp *http.Response, err error) {
 		return nil, nil
 	})
 }

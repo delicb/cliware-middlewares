@@ -20,7 +20,7 @@ func TestMethod(t *testing.T) {
 		m := headers.Method(method)
 		req := cliware.EmptyRequest()
 		handler := createHandler()
-		m.Exec(handler).Handle(nil, req)
+		m.Exec(handler).Handle(req)
 
 		if req.Method != method {
 			t.Errorf("Wrong method. Got: %s, expected: %s", req.Method, method)
@@ -75,7 +75,7 @@ func TestAdd(t *testing.T) {
 		}
 
 		handler := createHandler()
-		m.Exec(handler).Handle(nil, req)
+		m.Exec(handler).Handle(req)
 
 		if len(req.Header) != data.ExpectingHeaders {
 			t.Errorf("Number of headers to not match. Got: %d, expected: %d.", len(req.Header), data.ExpectingHeaders)
@@ -138,7 +138,7 @@ func TestSet(t *testing.T) {
 		}
 
 		handler := createHandler()
-		m.Exec(handler).Handle(nil, req)
+		m.Exec(handler).Handle(req)
 
 		if len(req.Header) != data.ExpectingHeaders {
 			t.Errorf("Number of headers to not match. Got: %d, expected: %d.", len(req.Header), data.ExpectingHeaders)
@@ -189,7 +189,7 @@ func TestDel(t *testing.T) {
 		}
 
 		handler := createHandler()
-		m.Exec(handler).Handle(nil, req)
+		m.Exec(handler).Handle(req)
 
 		_, ok := req.Header[data.Name]
 		if ok {
@@ -253,7 +253,7 @@ func TestSetMap(t *testing.T) {
 		}
 
 		handler := createHandler()
-		m.Exec(handler).Handle(nil, req)
+		m.Exec(handler).Handle(req)
 
 		if !reflect.DeepEqual(data.Expected, req.Header) {
 			t.Errorf("Wrong headers. Got: %s, expected: %s.", req.Header, data.Expected)
@@ -310,7 +310,8 @@ func TestFromContext_HeaderList(t *testing.T) {
 			ctx = context.WithValue(context.Background(), data.Key, data.Value)
 		}
 
-		_, err := m.Exec(createHandler()).Handle(ctx, req)
+		req = req.WithContext(ctx)
+		_, err := m.Exec(createHandler()).Handle(req)
 		if err != nil {
 			if data.ExpectedError == "" {
 				t.Errorf("Did not expect error, got: %s.", data.ExpectedError)
@@ -411,7 +412,7 @@ func TestToContextList(t *testing.T) {
 }
 
 func createHandler() cliware.Handler {
-	return cliware.HandlerFunc(func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
+	return cliware.HandlerFunc(func(req *http.Request) (resp *http.Response, err error) {
 		return nil, nil
 	})
 }

@@ -1,7 +1,6 @@
 package body_test
 
 import (
-	"context"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -30,11 +29,10 @@ func TestString(t *testing.T) {
 		{"š", "GET", "POST"},
 	} {
 		middleware := body.String(data.Data)
-		ctx := context.Background()
 		req := cliware.EmptyRequest()
 		req.Method = data.Method
 		h := createHandler()
-		_, err := middleware.Exec(h).Handle(ctx, req)
+		_, err := middleware.Exec(h).Handle(req)
 		if err != nil {
 			t.Error("Got error processing request: ", err)
 		}
@@ -75,7 +73,7 @@ func TestJSON(t *testing.T) {
 	} {
 		req := cliware.EmptyRequest()
 		handler := createHandler()
-		_, err := body.JSON(data.Data).Exec(handler).Handle(nil, req)
+		_, err := body.JSON(data.Data).Exec(handler).Handle(req)
 		if data.ExpectedError != nil {
 			if data.ExpectedError != err {
 				t.Errorf("Wrong error. Expected: %s, got: %s", data.ExpectedError, err)
@@ -138,7 +136,7 @@ func TestXML(t *testing.T) {
 	for _, data := range tests {
 		req := cliware.EmptyRequest()
 		handler := createHandler()
-		_, err := body.XML(data.Data).Exec(handler).Handle(nil, req)
+		_, err := body.XML(data.Data).Exec(handler).Handle(req)
 		if data.ExpectedError != nil {
 			if data.ExpectedError != err {
 				t.Errorf("Wrong error. Expected: %s, got: %s", data.ExpectedError, err)
@@ -191,7 +189,7 @@ func TestReader(t *testing.T) {
 	} {
 		req := cliware.EmptyRequest()
 		handler := createHandler()
-		_, err := body.Reader(data.Reader).Exec(handler).Handle(nil, req)
+		_, err := body.Reader(data.Reader).Exec(handler).Handle(req)
 		if data.ExpectError != nil {
 			if data.ExpectError.Error() != err.Error() {
 				t.Errorf("Wrong error. Expected: %s, got: %s", data.ExpectError.Error(), err.Error())
@@ -206,7 +204,7 @@ func TestReader(t *testing.T) {
 }
 
 func createHandler() cliware.Handler {
-	return cliware.HandlerFunc(func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
+	return cliware.HandlerFunc(func(req *http.Request) (resp *http.Response, err error) {
 		return nil, nil
 	})
 }

@@ -1,7 +1,6 @@
 package cookies_test
 
 import (
-	"context"
 	"net/http"
 	"testing"
 
@@ -52,7 +51,7 @@ func TestAdd(t *testing.T) {
 		for _, existing := range data.Existing {
 			req.AddCookie(existing)
 		}
-		_, err := chain.Exec(createHandler()).Handle(nil, req)
+		_, err := chain.Exec(createHandler()).Handle(req)
 		if err != nil {
 			t.Error("Handle returned error: ", err)
 		}
@@ -106,7 +105,7 @@ func TestSet(t *testing.T) {
 		for _, existing := range data.Existing {
 			req.AddCookie(existing)
 		}
-		_, err := chain.Exec(createHandler()).Handle(nil, req)
+		_, err := chain.Exec(createHandler()).Handle(req)
 		if err != nil {
 			t.Error("Handle returned error: ", err)
 		}
@@ -141,7 +140,7 @@ func TestDelAll(t *testing.T) {
 		for _, c := range existing {
 			req.AddCookie(c)
 		}
-		_, err := chain.Exec(createHandler()).Handle(nil, req)
+		_, err := chain.Exec(createHandler()).Handle(req)
 		if err != nil {
 			t.Error("Handle returned error: ", err)
 		}
@@ -185,7 +184,7 @@ func TestSetMap(t *testing.T) {
 		for _, c := range data.Existing {
 			req.AddCookie(c)
 		}
-		_, err := chain.Exec(createHandler()).Handle(nil, req)
+		_, err := chain.Exec(createHandler()).Handle(req)
 		if err != nil {
 			t.Error("Handle returned error: ", err)
 		}
@@ -231,7 +230,7 @@ func TestAddMultiple(t *testing.T) {
 		for _, c := range data.Existing {
 			req.AddCookie(c)
 		}
-		_, err := chain.Exec(createHandler()).Handle(nil, req)
+		_, err := chain.Exec(createHandler()).Handle(req)
 		if err != nil {
 			t.Error("Handle returned error: ", err)
 		}
@@ -250,7 +249,7 @@ func TestAddMultiple(t *testing.T) {
 }
 
 func createHandler() cliware.Handler {
-	return cliware.HandlerFunc(func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
+	return cliware.HandlerFunc(func(req *http.Request) (resp *http.Response, err error) {
 		return nil, nil
 	})
 }

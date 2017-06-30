@@ -1,7 +1,6 @@
 package responsebody_test
 
 import (
-	"context"
 	"errors"
 	"io/ioutil"
 	"net/http"
@@ -36,14 +35,14 @@ func TestJSON(t *testing.T) {
 	} {
 		var body map[string]interface{}
 		req := cliware.EmptyRequest()
-		handler := func(ctx context.Context, req *http.Request) (*http.Response, error) {
+		handler := func(req *http.Request) (*http.Response, error) {
 			r := &http.Response{
 				Body: ioutil.NopCloser(strings.NewReader(data.RawData)),
 			}
 			return r, data.Error
 		}
 
-		_, err := responsebody.JSON(&body).Exec(cliware.HandlerFunc(handler)).Handle(nil, req)
+		_, err := responsebody.JSON(&body).Exec(cliware.HandlerFunc(handler)).Handle(req)
 		if err != nil && data.Error == nil {
 			t.Error("Got unexpected error: ", err)
 		}
@@ -78,13 +77,13 @@ func TestString(t *testing.T) {
 	} {
 		var body string
 		req := cliware.EmptyRequest()
-		handler := func(ctx context.Context, req *http.Request) (*http.Response, error) {
+		handler := func(req *http.Request) (*http.Response, error) {
 			r := &http.Response{
 				Body: ioutil.NopCloser(strings.NewReader(data.Data)),
 			}
 			return r, data.Error
 		}
-		_, err := responsebody.String(&body).Exec(cliware.HandlerFunc(handler)).Handle(nil, req)
+		_, err := responsebody.String(&body).Exec(cliware.HandlerFunc(handler)).Handle(req)
 		if err != nil && data.Error == nil {
 			t.Error("Got unexpected error: ", err)
 		}
@@ -119,13 +118,13 @@ func TestWriter(t *testing.T) {
 	} {
 		buf := &bytes.Buffer{}
 		req := cliware.EmptyRequest()
-		handler := func(ctx context.Context, req *http.Request) (*http.Response, error) {
+		handler := func(req *http.Request) (*http.Response, error) {
 			r := &http.Response{
 				Body: ioutil.NopCloser(strings.NewReader(data.Data)),
 			}
 			return r, data.Error
 		}
-		_, err := responsebody.Writer(buf).Exec(cliware.HandlerFunc(handler)).Handle(nil, req)
+		_, err := responsebody.Writer(buf).Exec(cliware.HandlerFunc(handler)).Handle(req)
 		if err != nil && data.Error == nil {
 			t.Error("Got unexpected error: ", err)
 		}

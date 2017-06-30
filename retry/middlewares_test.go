@@ -16,13 +16,13 @@ import (
 func TestTimes(t *testing.T) {
 	for _, times := range []int{0, 1, 2, 3, 4, 5, 100} {
 		m := Times(times)
-		resultContext := context.Background()
 		initialContext := context.Background()
-		_, err := m.Exec(createHandler(&resultContext)).Handle(initialContext, nil)
+		req := cliware.EmptyRequest().WithContext(initialContext)
+		resp, err := m.Exec(createHandler()).Handle(req)
 		if err != nil {
 			t.Error("Handle returned error:", err)
 		}
-		got := getRetryTimes(resultContext)
+		got := getRetryTimes(resp.Request.Context())
 		if got != times {
 			t.Errorf("Wrong number of retries. Got %d, expected: %d.", got, times)
 		}
@@ -34,13 +34,13 @@ func TestSetClassifier(t *testing.T) {
 		func(resp *http.Response, err error) bool { return true },
 	} {
 		m := SetClassifier(classifier)
-		resultContext := context.Background()
 		initialContext := context.Background()
-		_, err := m.Exec(createHandler(&resultContext)).Handle(initialContext, nil)
+		req := cliware.EmptyRequest().WithContext(initialContext)
+		resp, err := m.Exec(createHandler()).Handle(req)
 		if err != nil {
 			t.Error("Handle returned error:", err)
 		}
-		got := getClassifier(resultContext)
+		got := getClassifier(resp.Request.Context())
 		// can not really compare functions, so just check if we not non-nill value
 		if got == nil {
 			t.Error("Wrong classifier. Got nil")
@@ -53,13 +53,13 @@ func TestSetBackoffStrategy(t *testing.T) {
 		func(n int) time.Duration { return time.Second },
 	} {
 		m := SetBackoffStrategy(backoff)
-		resultContext := context.Background()
 		initialContext := context.Background()
-		_, err := m.Exec(createHandler(&resultContext)).Handle(initialContext, nil)
+		req := cliware.EmptyRequest().WithContext(initialContext)
+		resp, err := m.Exec(createHandler()).Handle(req)
 		if err != nil {
 			t.Error("Handle returned error:", err)
 		}
-		got := getBackoff(resultContext)
+		got := getBackoff(resp.Request.Context())
 		// can not really compare functions, so just check if we not non-nil value
 		if got == nil {
 			t.Error("Wrong backoff strategy. Got nil")
@@ -72,13 +72,13 @@ func TestMaxDuration(t *testing.T) {
 		time.Second, time.Minute, 2 * time.Hour, 3 * time.Hour, 0,
 	} {
 		m := MaxDuration(duration)
-		var resultContext context.Context
 		initialContext := context.Background()
-		_, err := m.Exec(createHandler(&resultContext)).Handle(initialContext, nil)
+		req := cliware.EmptyRequest().WithContext(initialContext)
+		resp, err := m.Exec(createHandler()).Handle(req)
 		if err != nil {
 			t.Error("Handle returned error:", err)
 		}
-		got := getMaxDuration(resultContext)
+		got := getMaxDuration(resp.Request.Context())
 		if got != duration {
 			t.Errorf("Wrong max duration. Got: %s, expected: %s.", got, duration)
 		}
@@ -90,13 +90,13 @@ func TestBodyStrategy(t *testing.T) {
 		BodyStrategy(func(r *http.Request) (func() io.ReadCloser, error) { return nil, nil }),
 	} {
 		m := SetBodyStrategy(strategy)
-		var resultContext context.Context
 		initialContext := context.Background()
-		_, err := m.Exec(createHandler(&resultContext)).Handle(initialContext, nil)
+		req := cliware.EmptyRequest().WithContext(initialContext)
+		resp, err := m.Exec(createHandler()).Handle(req)
 		if err != nil {
 			t.Error("Handle returned error:", err)
 		}
-		got := getBodyStrategy(resultContext)
+		got := getBodyStrategy(resp.Request.Context())
 		// can not really compare functions, so just check if we got non-nil value
 		if got == nil {
 			t.Error("Wrong body strategy. Got nil.")
@@ -111,22 +111,23 @@ func TestMethods(t *testing.T) {
 		{"GET", "POST", "PUT"},
 	} {
 		m := Methods(methods...)
-		var resultContext context.Context
 		initialContext := context.Background()
-		_, err := m.Exec(createHandler(&resultContext)).Handle(initialContext, nil)
+		req := cliware.EmptyRequest().WithContext(initialContext)
+		resp, err := m.Exec(createHandler()).Handle(req)
 		if err != nil {
 			t.Error("Handle returned error:", err)
 		}
-		got := getRetryMethods(resultContext)
+		got := getRetryMethods(resp.Request.Context())
 		if !reflect.DeepEqual(got, methods) {
 			t.Errorf("Wrong HTTP methods. Got: %s, expected: %s.", got, methods)
 		}
 	}
 }
 
-func createHandler(resultContext *context.Context) cliware.Handler {
-	return cliware.HandlerFunc(func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
-		*resultContext = ctx
-		return nil, nil
+func createHandler() cliware.Handler {
+	return cliware.HandlerFunc(func(req *http.Request) (resp *http.Response, err error) {
+		return &http.Response{
+			Request: req,
+		}, nil
 	})
 }

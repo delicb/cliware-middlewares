@@ -2,7 +2,6 @@ package errors_test
 
 import (
 	"bytes"
-	"context"
 	"net/http"
 	"testing"
 
@@ -83,7 +82,7 @@ func TestErrors(t *testing.T) {
 		m := errors.Errors()
 		req := cliware.EmptyRequest()
 		handler := createHandler(data.Response, data.OriginalError)
-		_, err := m.Exec(handler).Handle(nil, req)
+		_, err := m.Exec(handler).Handle(req)
 
 		if data.Error == nil && data.OriginalError == nil {
 			if err != nil {
@@ -151,7 +150,7 @@ func TestHTTPError_Error(t *testing.T) {
 }
 
 func createHandler(wantedResponse *http.Response, wantError error) cliware.Handler {
-	return cliware.HandlerFunc(func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
+	return cliware.HandlerFunc(func(req *http.Request) (resp *http.Response, err error) {
 		return wantedResponse, wantError
 	})
 }

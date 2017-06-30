@@ -5,8 +5,6 @@ import (
 	neturl "net/url"
 	"testing"
 
-	"context"
-
 	"reflect"
 
 	"github.com/delicb/cliware"
@@ -22,7 +20,7 @@ func testURLMiddleware(t *testing.T, data []testData, factory func(r *http.Reque
 	for _, d := range data {
 		req := cliware.EmptyRequest()
 		handler := createHandler()
-		factory(req, d).Exec(handler).Handle(nil, req)
+		factory(req, d).Exec(handler).Handle(req)
 		if !reflect.DeepEqual(req.URL, d.URL) {
 			t.Errorf("URL did not match. Got: \"%s\", expected: \"%s\".", req.URL, d.URL)
 		}
@@ -30,7 +28,7 @@ func testURLMiddleware(t *testing.T, data []testData, factory func(r *http.Reque
 }
 
 func createHandler() cliware.Handler {
-	return cliware.HandlerFunc(func(ctx context.Context, req *http.Request) (resp *http.Response, err error) {
+	return cliware.HandlerFunc(func(req *http.Request) (resp *http.Response, err error) {
 		return nil, nil
 	})
 }
@@ -123,7 +121,7 @@ func TestParam(t *testing.T) {
 		req := cliware.EmptyRequest()
 		req.URL.Path = data.InitialPath
 		handler := createHandler()
-		url.Param(data.ParamKey, data.ParamValue).Exec(handler).Handle(nil, req)
+		url.Param(data.ParamKey, data.ParamValue).Exec(handler).Handle(req)
 
 		if req.URL.Path != data.ResultPath {
 			t.Errorf("Got wrong path. Got: %s, expected: %s.", req.URL.Path, data.ResultPath)
@@ -163,7 +161,7 @@ func TestParams(t *testing.T) {
 		req := cliware.EmptyRequest()
 		req.URL.Path = data.InitialPath
 		handler := createHandler()
-		url.Params(data.Params).Exec(handler).Handle(nil, req)
+		url.Params(data.Params).Exec(handler).Handle(req)
 
 		if req.URL.Path != data.ResultPath {
 			t.Errorf("Got wrong path. Got: %s, expected: %s.", req.URL.Path, data.ResultPath)
