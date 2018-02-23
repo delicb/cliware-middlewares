@@ -41,8 +41,8 @@ func TestURL(t *testing.T) {
 			Path:     "/path",
 			RawQuery: "query=value",
 		}},
-		{"bojan.delic.rs", &neturl.URL{Scheme: "http", Host: "bojan.delic.rs"}},
-		{"/path", &neturl.URL{Scheme: "http", Path: "/path"}},
+		{"bojan.delic.rs", &neturl.URL{Scheme: "https", Host: "bojan.delic.rs"}},
+		{"/path", &neturl.URL{Scheme: "https", Path: "/path"}},
 	}
 	testURLMiddleware(t, data, func(r *http.Request, d testData) cliware.Middleware {
 		return url.URL(d.Input)
@@ -52,7 +52,7 @@ func TestURL(t *testing.T) {
 func TestBaseURL(t *testing.T) {
 	data := []testData{
 		{"https://bojan.delic.rs:1234/path?query=value", &neturl.URL{Scheme: "https", Host: "bojan.delic.rs:1234"}},
-		{"localhost/path?query=1", &neturl.URL{Scheme: "http", Host: "localhost"}},
+		{"localhost/path?query=1", &neturl.URL{Scheme: "https", Host: "localhost"}},
 	}
 	testURLMiddleware(t, data, func(r *http.Request, d testData) cliware.Middleware {
 		return url.BaseURL(d.Input)

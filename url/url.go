@@ -91,9 +91,13 @@ func normalizePath(path string) string {
 }
 
 func normalize(uri string) string {
+	if uri == "" {
+		return uri
+	}
 	match, _ := regexp.MatchString("^http[s]?://", uri)
 	if match {
 		return uri
 	}
-	return "http://" + uri
+
+	return "https://" + uri
 }
