@@ -4,7 +4,6 @@ package url
 import (
 	"net/http"
 	"net/url"
-	"regexp"
 	"strings"
 
 	c "github.com/delicb/cliware"
@@ -15,7 +14,7 @@ import (
 // from this package.
 func URL(rawURL string) c.Middleware {
 	return c.RequestProcessor(func(req *http.Request) error {
-		u, err := url.Parse(normalize(rawURL))
+		u, err := parseURL(rawURL)
 		if err != nil {
 			return err
 		}
@@ -27,7 +26,7 @@ func URL(rawURL string) c.Middleware {
 // BaseURL parses and sets schema and host to the request.
 func BaseURL(uri string) c.Middleware {
 	return c.RequestProcessor(func(req *http.Request) error {
-		u, err := url.Parse(normalize(uri))
+		u, err := parseURL(uri)
 		if err != nil {
 			return err
 		}
@@ -90,14 +89,14 @@ func normalizePath(path string) string {
 	return path
 }
 
-func normalize(uri string) string {
-	if uri == "" {
-		return uri
+func parseURL(rawURL string) (*url.URL, error) {
+	u, err := url.Parse(rawURL)
+	if err != nil {
+		return nil, err
 	}
-	match, _ := regexp.MatchString("^http[s]?://", uri)
-	if match {
-		return uri
+	// if scheme is not set, but anything else is - default scheme to HTTPS
+	if u.Scheme == "" && (u.Host != "" || u.Path != "") {
+		u.Scheme = "https"
 	}
-
-	return "https://" + uri
+	return u, nil
 }

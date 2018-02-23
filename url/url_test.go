@@ -1,8 +1,10 @@
 package url_test
 
 import (
+	"fmt"
 	"net/http"
 	neturl "net/url"
+	"strings"
 	"testing"
 
 	"reflect"
@@ -16,13 +18,28 @@ type testData struct {
 	URL   *neturl.URL
 }
 
+func cmpURL(first *neturl.URL, second *neturl.URL) string {
+	var b strings.Builder
+	if first.Scheme != second.Scheme {
+		b.WriteString(fmt.Sprintf("Scheme: %q != %q\n", first.Scheme, second.Scheme))
+	}
+	if first.Host != second.Host {
+		b.WriteString(fmt.Sprintf("Host: %q != %q\n", first.Host, second.Host))
+	}
+	if first.Path != second.Path {
+		b.WriteString(fmt.Sprintf("Path: %q != %q\n", first.Path, second.Path))
+	}
+	return b.String()
+}
+
 func testURLMiddleware(t *testing.T, data []testData, factory func(r *http.Request, input testData) cliware.Middleware) {
 	for _, d := range data {
 		req := cliware.EmptyRequest()
 		handler := createHandler()
 		factory(req, d).Exec(handler).Handle(req)
 		if !reflect.DeepEqual(req.URL, d.URL) {
-			t.Errorf("URL did not match. Got: \"%s\", expected: \"%s\".", req.URL, d.URL)
+			t.Errorf("URL did not match. Diff: \n\t%s", cmpURL(d.URL, req.URL))
+			// t.Errorf("URL did not match. Got: \"%s\", expected: \"%s\".", d.URL, req.URL)
 		}
 	}
 }
@@ -41,7 +58,7 @@ func TestURL(t *testing.T) {
 			Path:     "/path",
 			RawQuery: "query=value",
 		}},
-		{"bojan.delic.rs", &neturl.URL{Scheme: "https", Host: "bojan.delic.rs"}},
+		{"bojan.delic.rs", &neturl.URL{Scheme: "https", Path: "bojan.delic.rs"}},
 		{"/path", &neturl.URL{Scheme: "https", Path: "/path"}},
 	}
 	testURLMiddleware(t, data, func(r *http.Request, d testData) cliware.Middleware {
@@ -52,7 +69,7 @@ func TestURL(t *testing.T) {
 func TestBaseURL(t *testing.T) {
 	data := []testData{
 		{"https://bojan.delic.rs:1234/path?query=value", &neturl.URL{Scheme: "https", Host: "bojan.delic.rs:1234"}},
-		{"localhost/path?query=1", &neturl.URL{Scheme: "https", Host: "localhost"}},
+		{"http://localhost/path?query=1", &neturl.URL{Scheme: "http", Host: "localhost"}},
 	}
 	testURLMiddleware(t, data, func(r *http.Request, d testData) cliware.Middleware {
 		return url.BaseURL(d.Input)
