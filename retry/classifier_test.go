@@ -5,7 +5,8 @@ import (
 
 	"net/http"
 
-	"github.com/pkg/errors"
+	"errors"
+
 	"github.com/delicb/cliware-middlewares/retry"
 )
 
