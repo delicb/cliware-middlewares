@@ -1,10 +1,10 @@
 package url_test
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	neturl "net/url"
-	"strings"
 	"testing"
 
 	"reflect"
@@ -18,8 +18,8 @@ type testData struct {
 	URL   *neturl.URL
 }
 
-func cmpURL(first *neturl.URL, second *neturl.URL) string {
-	var b strings.Builder
+func diffURL(first *neturl.URL, second *neturl.URL) string {
+	var b bytes.Buffer
 	if first.Scheme != second.Scheme {
 		b.WriteString(fmt.Sprintf("Scheme: %q != %q\n", first.Scheme, second.Scheme))
 	}
@@ -38,7 +38,7 @@ func testURLMiddleware(t *testing.T, data []testData, factory func(r *http.Reque
 		handler := createHandler()
 		factory(req, d).Exec(handler).Handle(req)
 		if !reflect.DeepEqual(req.URL, d.URL) {
-			t.Errorf("URL did not match. Diff: \n\t%s", cmpURL(d.URL, req.URL))
+			t.Errorf("URL did not match. Diff: \n\t%s", diffURL(d.URL, req.URL))
 			// t.Errorf("URL did not match. Got: \"%s\", expected: \"%s\".", d.URL, req.URL)
 		}
 	}
